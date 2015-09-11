@@ -18,7 +18,7 @@ My younger sister is now a Linux user but she's not too tech savvy, as a result,
 
 ### How can you trust me?
 
-You have full access to the source code, comments and files. This allows you to read exactly what is does, allowing full transparency. I made this for my ease, I shared it because I'm nice.
+You have full access to the source code, comments and files. This allows you to read exactly what it does, allowing full transparency. I made this for my ease, I shared it because I'm nice.
 
 ### How do I install the script?
 
