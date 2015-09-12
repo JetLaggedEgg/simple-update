@@ -1,16 +1,19 @@
 #!/bin/bash
 
-#This is version 1.3.
+#This is version 1.4 of simple-update, a scipt made to make updating linux
+#easier for those who are new and learning.
+#Released under the MIT licence by Daniel Sarracayo.
+#Copyright (c) 2015 Daniel Sarracayo.
 #Figlet is used, but not required.
 
 #Checking if figlet is installed for logo.
 if hash figlet 2>/dev/null; then
   #It is! Use it to print "simpUp".
-  figlet "simple-update v1.3"
+  figlet "simple-update v1.4"
   echo "The simplest 'update everything' script around!"
 else
   #It isn't :( cry and just print horrible text.
-  echo "simple-update v1.3 - the simplest 'update everything' script around!"
+  echo "simple-update v1.4 - the simplest 'update everything' script around!"
 fi
 
 #Let them see ma logo ;)
@@ -21,44 +24,63 @@ if [ "$(whoami)" != "root" ]; then
   #Not root.
   #Tell them to execute as root.
   echo "Ah!! I don't have root permissions!"
-  echo "Please run me with 'sudo' before my name."
-  echo "Like so: sudo simple-update"
+  echo "Please execute me as root, i.e 'sudo'."
   exit 2
 else
   #Is root.
   #Continue to execute updates.
   echo "Now updating your PC, Master."
   apt-get -qq update -y &> /dev/null
-  echo "1/4 I just updated your package database!"
+  echo "1/5 I just updated your package database!"
   sleep 2
   apt-get -qq upgrade -y &> /dev/null
-  echo "2/4 I just upgraded any packages!"
+  echo "2/5 I just upgraded standard packages!"
   sleep 2
   apt-get -qq dist-upgrade -y &> /dev/null
-  echo "3/4 I just upgraded any 'special' packages!"
+  echo "3/5 I just upgraded important packages!"
   sleep 2
   #Ask if they wanna autoremove as well.
   while true; do
-    echo -n "Should I remove old packages and free some space? [y/N]"
-    read response
-    case $response in
+    echo -n "Should I remove un-needed packages? [y/N]"
+    read response1
+    case $response1 in
       [yY])
       #Said yes, autoremove.
       apt-get -qq autoremove -y &> /dev/null
-      echo "4/4 I just removed un-needed packages."
+      echo "4/5 I just removed un-needed packages."
       sleep 2
       break;
       ;;
       *)
       #Said no or just entered.
-      echo "4/4 I have not removed un-needed packages."
+      echo "4/5 I have not removed un-needed packages."
+      sleep 2
+      break;
+      ;;
+    esac
+  done
+  #Ask if they wanna autoremove as well.
+  while true; do
+    echo -n "Should I clean up and free some space? [y/N]"
+    read response2
+    case $response2 in
+      [yY])
+      #Said yes, autoremove.
+      apt-get -qq autoclean -y &> /dev/null
+      echo "5/5 I just cleaned up directories."
+      sleep 2
+      break;
+      ;;
+      *)
+      #Said no or just entered.
+      echo "5/5 I have not cleaned up directories."
       sleep 2
       break;
       ;;
     esac
   done
   echo "All done, your PC is up to date."
-  echo "some updates may only take action once you reboot."
-  echo "This does not need to be done right now though!"
+  echo "Some updates may only take action once you reboot,"
+  echo "this can be done when you're ready though!"
   exit 1
 fi
