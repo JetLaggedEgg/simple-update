@@ -1,44 +1,65 @@
 #!/bin/bash
 
-#This is version 1.4 of simple-update, a scipt made to make updating linux
+#This is version 1.4.1 of simple-update, a scipt made to make updating linux
 #easier for those who are new and learning.
 #Released under the MIT licence by Daniel Sarracayo.
 #Copyright (c) 2015 Daniel Sarracayo.
 #Figlet is used, but not required.
 
-#Checking if figlet is installed for logo.
-if hash figlet 2>/dev/null; then
-  #It is! Use it to print "simpUp".
-  figlet "simple-update v1.4"
-  echo "The simplest 'update everything' script around!"
-else
-  #It isn't :( cry and just print horrible text.
-  echo "simple-update v1.4 - the simplest 'update everything' script around!"
-fi
-
-#Let them see ma logo ;)
-sleep 1
-
 #Checking for root.
 if [ "$(whoami)" != "root" ]; then
   #Not root.
   #Tell them to execute as root.
-  echo "Ah!! I don't have root permissions!"
-  echo "Please execute me as root, i.e 'sudo'."
-  exit 2
+  echo -e "\e[1mAh!! I don't have root permissions!"
+  echo -e "\e[1mPlease execute me as root, i.e [sudo simple-update]"
+  echo -e "\e[0m"
+  exit 1
 else
   #Is root.
+
+  #Checking for internet connection.
+  wget -q --tries=10 --timeout=20 --spider http://ubuntu.com &> /dev/null
+  if [[ $? -eq 0 ]]; then
+    #Connected to the internet, continue.
+    break;
+  else
+    #Not connected to the internet.
+    echo "I'm sorry, I could not connect to the internet."
+    echo "Please check your connection."
+    exit 1
+  fi
+
+  #Checking if figlet is installed for logo.
+  if hash figlet 2>/dev/null; then
+    #It is! Use it to print "simple-update".
+    figlet -t "simple - update"
+    echo -e "\e[1mThe simplest 'update everything' script around! - v1.4.1"
+    echo -en "\e[0m"
+    echo "Released under MIT - http://github.com/jetlaggedegg/simple-update"
+  else
+    #It isn't :( cry and just print horrible text.
+    echo -e "\e[1msimple-update v1.4.1 - the simplest 'update everything' script around!"
+    echo -en "\e[0m"
+    echo "Released under MIT - http://github.com/jetlaggedegg/simple-update"
+  fi
+
+  #Make some space.
+  echo -e "\n"
+
+  #Let them see ma logo ;)
+  sleep 1
+
   #Continue to execute updates.
   echo "Now updating your PC, Master."
   apt-get -qq update -y &> /dev/null
   echo "1/5 I just updated your package database!"
-  sleep 2
+  sleep 1
   apt-get -qq upgrade -y &> /dev/null
   echo "2/5 I just upgraded standard packages!"
-  sleep 2
+  sleep 1
   apt-get -qq dist-upgrade -y &> /dev/null
   echo "3/5 I just upgraded important packages!"
-  sleep 2
+  sleep 1
   #Ask if they wanna autoremove as well.
   while true; do
     echo -n "Should I remove un-needed packages? [y/N]"
@@ -48,13 +69,13 @@ else
       #Said yes, autoremove.
       apt-get -qq autoremove -y &> /dev/null
       echo "4/5 I just removed un-needed packages."
-      sleep 2
+      sleep 1
       break;
       ;;
       *)
       #Said no or just entered.
       echo "4/5 I have not removed un-needed packages."
-      sleep 2
+      sleep 1
       break;
       ;;
     esac
@@ -68,17 +89,20 @@ else
       #Said yes, autoremove.
       apt-get -qq autoclean -y &> /dev/null
       echo "5/5 I just cleaned up directories."
-      sleep 2
+      sleep 1
       break;
       ;;
       *)
       #Said no or just entered.
       echo "5/5 I have not cleaned up directories."
-      sleep 2
+      sleep 1
       break;
       ;;
     esac
   done
+
+  #Confirmation and info about rebooting.
+  echo -e "\n"
   echo "All done, your PC is up to date."
   echo "Some updates may only take action once you reboot,"
   echo "this can be done when you're ready though!"
