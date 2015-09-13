@@ -20,8 +20,8 @@ else
   #Checking for internet connection.
   wget -q --tries=10 --timeout=20 --spider http://ubuntu.com &> /dev/null
   if [[ $? -eq 0 ]]; then
-    #Connected to the internet, continue.
-    break;
+    #Connected to the internet, do nothing but continue script exec.
+    : #Empty command, because bash hates nothing or anything but.
   else
     #Not connected to the internet.
     echo "I'm sorry, I could not connect to the internet."
