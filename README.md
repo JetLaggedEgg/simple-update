@@ -11,6 +11,7 @@ simple-update is simple bash script that uses 'apt' to update your system, it ev
 and lastly, with your permission,
 
 * apt-get autoremove
+* apt-get autoclean
 
 ### Why did I make this?
 
